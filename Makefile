@@ -6,7 +6,7 @@ all:  	clean venv fetch merge epub mobi pdf
 
 clean:
 		@echo "🗑 Cleaning up the room..."
-		rm -rf essays .venv graham.epub graham.md ; true
+		rm -rf essays/ .venv/ graham.epub graham.md graham.mobi graham.pdf; true
 
 merge:
 		@echo "🌪 Merging articles..."
