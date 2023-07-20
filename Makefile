@@ -4,7 +4,7 @@ SHELL := /bin/bash
 
 all:  	clean venv fetch merge epub mobi pdf
 
-clean: 
+clean:
 		@echo "🗑 Cleaning up the room..."
 		rm -rf essays .venv graham.epub graham.md ; true
 
@@ -12,7 +12,7 @@ merge:
 		@echo "🌪 Merging articles..."
 		pandoc essays/*.md -o graham.md -f markdown_strict
 
-count:	
+count:
 		wc -w essays/* | sort -n
 
 venv:
@@ -28,9 +28,9 @@ dependencies: # for MacOS
 		brew install --build-from-source pandoc
 		brew install --cask calibre
 
-fetch:	
+fetch:
 		@echo "🧠 Downloading Paul Graham mind... "
-		python3 graham.py 
+		python3 graham.py
 
 epub:
 		${merge}
