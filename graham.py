@@ -91,19 +91,14 @@ for entry in reversed(rss.entries):
                         quotechar='"')
 
                     if ART_NO == 1:
-                        fieldnames = ["Article no.", "Title", "Date", "URL"]
-                        csvwriter = csv.DictWriter(
-                            f, fieldnames=fieldnames)
-                        csvwriter.writeheader()
+                        header = ["Article no.", "Title", "Date", "URL"]
+                        csvwriter.writerow(header)
 
                     DATE = find_date(entry['link'])
 
-                    line = [ART_NO,
-                            TITLE,
-                            DATE,
-                            URL]
+                    line = [ART_NO, TITLE, DATE, URL]
 
-                    csvwriter.writerow(line)
+                    csvwriter.writerow(line) # 'list' object has no attribute 'keys'
 
     except Exception as e:
         print(f"❌ {ART_NO:03} {entry['title']}, ({e})")
