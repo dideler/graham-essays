@@ -17,7 +17,6 @@ count:
 
 venv:
 		@echo "🐍 Creating a safe place for a Python... "
-		mkdir essays
 		python3 -m venv .venv
 		source "./.venv/bin/activate"
 		pip3 install --upgrade pip
@@ -30,6 +29,7 @@ dependencies: # for MacOS
 
 fetch:
 		@echo "🧠 Downloading Paul Graham mind... "
+		mkdir essays
 		python3 graham.py
 
 epub:

@@ -20,6 +20,4 @@ jobs:
           make dependencies
 
       - name: Run
-        run: |
-          mkdir essays
-          make all
+        run: make all

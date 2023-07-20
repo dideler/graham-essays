@@ -30,7 +30,5 @@ jobs:
         run: |
           make dependencies
 
-      - name: Run
-        run: |
-          mkdir essays
-          make all
+      - name: Build artifacts
+        run: make all
