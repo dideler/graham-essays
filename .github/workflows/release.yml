@@ -21,9 +21,11 @@ jobs:
           automatic_release_tag: latest
           title: Paul Graham Essays
           files: |
-            *.epub
-            *.mobi
-            *.csv
+            graham.epub
+            graham.mobi
+            graham.csv
+            graham.md
+            graham.pdf
 
       - name: Install dependencies
         run: |
