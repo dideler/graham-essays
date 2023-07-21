@@ -15,8 +15,11 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install dependencies
+      - name: Install system dependencies
         run: make macos_deps
+
+      - name: Install Python dependencies
+        run: make .venv
 
       - name: Build artifacts
         run: make all

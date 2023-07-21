@@ -1,55 +1,62 @@
 SHELL := /bin/bash
+SRC_DIR := essays
+OUT_DIR := build
 
-.SILENT: word_count macos_deps ubuntu_deps clean venv fetch markdown epub mobi pdf
-.PHONY:  word_count macos_deps ubuntu_deps clean venv fetch markdown epub mobi pdf
+.PHONY: help
+help:
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-30s\033[0m %s\n", $$1, $$2}'
 
-all: clean venv fetch markdown epub mobi pdf
+all: $(OUT_DIR) ## Fetches all the essays and creates books in various file formats
 
-clean:
-		@echo "🗑 Cleaning up the room..."
-		rm -rf essays/ .venv/ graham.epub graham.md graham.mobi graham.pdf; true
+$(OUT_DIR): $(SRC_DIR)/%.md $(OUT_DIR)/%.md $(OUT_DIR)/%.epub $(OUT_DIR)/%.mobi $(OUT_DIR)/%.pdf
 
-word_count:
-		wc -w essays/* | sort -n
+$(SRC_DIR)/%.md: ## Fetches all the essays as Markdown files and creates a CSV index
+	@echo "⬇️ Downloading essays..."
+	python3 graham.py
+	@echo "🎉 Essays and CSV file created."
 
-venv:
-		@echo "🐍 Creating a safe place for a Python..."
-		python3 -m venv .venv
-		source "./.venv/bin/activate"
-		pip3 install --upgrade pip
-		pip3 install -r requirements.txt
+$(OUT_DIR)/%.md: $(SRC_DIR)/%.md ## Creates a Markdown book of the essays
+	@echo "📒 Binding Markdown..."
+	pandoc essays/*.md -o graham.md -f markdown_strict
+	@echo "🎉 MD file created."
 
-macos_deps:
-		brew install python@3
-		brew install --build-from-source pandoc
-		brew install --cask calibre
+$(OUT_DIR)/%.epub: $(SRC_DIR)/%.md ## Creates an EPUB book of the essays
+	@echo "📒 Binding EPUB..."
+	pandoc essays/*.md -o graham.epub -f markdown_strict --metadata-file=metadata.yaml --toc --toc-depth=1 --epub-cover-image=cover.png
+	@echo "🎉 EPUB file created."
 
-ubuntu_deps:
-		sudo apt install --yes pandoc
-		sudo apt install --yes calibre
-		pip install --upgrade chardet
+$(OUT_DIR)/%.mobi: $(OUT_DIR)/%.epub ## Creates a MOBI book of the essays
+	@echo "📒 Binding MOBI..."
+	ebook-convert graham.epub graham.mobi
+	@echo "🎉 MOBI file created."
 
-fetch:
-		@echo "🧠 Downloading Paul Graham mind..."
-		mkdir essays
-		python3 graham.py
+$(OUT_DIR)/%.pdf: $(OUT_DIR)/%.epub ## Creates a PDF book of the essays
+	@echo "📒 Binding PDF..."
+	ebook-convert graham.epub graham.pdf
+	@echo "🎉 PDF file created."
 
-markdown:
-		@echo "📒 Binding Markdown..."
-		pandoc essays/*.md -o graham.md -f markdown_strict
-		@echo "🎉 MD file created."
+.venv: ## Creates a virtual environment for Python and installs dependencies
+	python3 -m venv .venv
+	source "./.venv/bin/activate"
+	pip3 install --upgrade pip
+	pip3 install -r requirements.txt
 
-epub:
-		@echo "📒 Binding EPUB..."
-		pandoc essays/*.md -o graham.epub -f markdown_strict --metadata-file=metadata.yaml --toc --toc-depth=1 --epub-cover-image=cover.png
-		@echo "🎉 EPUB file created."
+.PHONY: macos_deps
+macos_deps: ## Installs macOS dependencies
+	brew install python@3
+	brew install --build-from-source pandoc
+	brew install --cask calibre
 
-mobi: epub
-		@echo "📒 Binding MOBI..."
-		ebook-convert graham.epub graham.mobi
-		@echo "🎉 MOBI file created."
+.PHONY: ubuntu_deps
+ubuntu_deps: ## Installs Ubuntu dependencies
+	sudo apt install --yes pandoc
+	sudo apt install --yes calibre
+	pip install --upgrade chardet
 
-pdf: epub
-		@echo "📒 Binding PDF..."
-		ebook-convert graham.epub graham.pdf
-		@echo "🎉 PDF file created."
+.PHONY: clean
+clean: ## Clean all generated files and Python virtual environment
+	rm -rf .venv/ essays/* essays.csv build/*
+
+.PHONY: word_count
+word_count: ## Count words of all essays
+	@wc -w essays/* | sort --numeric-sort
