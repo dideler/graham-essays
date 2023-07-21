@@ -13,7 +13,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Release files
+      - name: Install dependencies
+        run: make macos_deps
+
+      - name: Build artifacts
+        run: make all
+
+      - name: Release artifacts
         uses: marvinpinto/action-automatic-releases@latest
         with:
           repo_token: ${{ secrets.GRAHAM_ESSAYS }}
@@ -25,9 +31,3 @@ jobs:
             graham.csv
             graham.md
             graham.pdf
-
-      - name: Install dependencies
-        run: make macos_deps
-
-      - name: Build artifacts
-        run: make all
