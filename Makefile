@@ -1,16 +1,12 @@
 SHELL := /bin/bash
 
-.SILENT: dependencies clean venv fetch merge epub word_count mobi
+.SILENT: dependencies clean venv fetch markdown epub word_count mobi
 
-all:  	clean venv fetch merge epub mobi pdf
+all: clean venv fetch markdown epub mobi pdf
 
 clean:
 		@echo "🗑 Cleaning up the room..."
 		rm -rf essays/ .venv/ graham.epub graham.md graham.mobi graham.pdf; true
-
-merge:
-		@echo "🌪 Merging articles..."
-		pandoc essays/*.md -o graham.md -f markdown_strict
 
 word_count:
 		wc -w essays/* | sort -n
@@ -32,8 +28,13 @@ fetch:
 		mkdir essays
 		python3 graham.py
 
+markdown:
+		@echo "📒 Binding Markdown..."
+		pandoc essays/*.md -o graham.md -f markdown_strict
+		@echo "🎉 MD file created."
+
 epub:
-		${merge}
+		${markdown}
 		@echo "📒 Binding EPUB... "
 		pandoc essays/*.md -o graham.epub -f markdown_strict --metadata-file=metadata.yaml --toc --toc-depth=1 --epub-cover-image=cover.png
 		@echo "🎉 EPUB file created."
