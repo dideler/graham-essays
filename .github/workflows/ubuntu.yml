@@ -17,6 +17,5 @@ jobs:
       - name: Install dependencies
         run: make ubuntu_deps
 
-      - name: Running app
-        run: |
-          make clean venv fetch merge epub
+      - name: Build artifacts
+        run: make all
