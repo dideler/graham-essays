@@ -44,14 +44,12 @@ epub:
 		pandoc essays/*.md -o graham.epub -f markdown_strict --metadata-file=metadata.yaml --toc --toc-depth=1 --epub-cover-image=cover.png
 		@echo "🎉 EPUB file created."
 
-mobi:
-		${epub}
+mobi: epub
 		@echo "📒 Binding MOBI..."
 		ebook-convert graham.epub graham.mobi
 		@echo "🎉 MOBI file created."
 
-pdf:
-		${epub}
+pdf: epub
 		@echo "📒 Binding PDF..."
 		ebook-convert graham.epub graham.pdf
 		@echo "🎉 PDF file created."
