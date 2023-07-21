@@ -1,9 +1,6 @@
 on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
-  schedule:
+  workflow_dispatch: # Trigger on 'Run workflow' button on the Actions web UI.
+  schedule: # Daily at midnight UTC.
     - cron: '0 0 * * *'
 
 jobs:
