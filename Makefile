@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.SILENT: macos_deps clean venv fetch markdown epub word_count mobi pdf
+.SILENT: word_count macos_deps ubuntu_deps clean venv fetch markdown epub mobi pdf
 
 all: clean venv fetch markdown epub mobi pdf
 
@@ -22,6 +22,11 @@ macos_deps:
 		brew install python@3
 		brew install --build-from-source pandoc
 		brew install --cask calibre
+
+ubuntu_deps:
+		sudo apt install --yes pandoc
+		sudo apt install --yes calibre
+		pip install --upgrade chardet
 
 fetch:
 		@echo "🧠 Downloading Paul Graham mind..."
