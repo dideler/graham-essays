@@ -1,6 +1,7 @@
 SHELL := /bin/bash
 
 .SILENT: word_count macos_deps ubuntu_deps clean venv fetch markdown epub mobi pdf
+.PHONY:  word_count macos_deps ubuntu_deps clean venv fetch markdown epub mobi pdf
 
 all: clean venv fetch markdown epub mobi pdf
 
