@@ -13,10 +13,11 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Install dependencies
         run: make macos_deps
 
-      - name: Run
+      - name: Build artifacts
         run: make all
