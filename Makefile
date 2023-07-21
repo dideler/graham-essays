@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.SILENT: dependencies clean venv fetch markdown epub word_count mobi
+.SILENT: dependencies clean venv fetch markdown epub word_count mobi pdf
 
 all: clean venv fetch markdown epub mobi pdf
 
