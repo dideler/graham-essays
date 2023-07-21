@@ -1,3 +1,5 @@
+name: Release
+
 on:
   workflow_dispatch: # Trigger on 'Run workflow' button on the Actions web UI.
   schedule: # Daily at midnight UTC.
