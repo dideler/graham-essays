@@ -136,9 +136,6 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-essays
-graham.md
-graham.epub
 Pipfile
 .vscode
 .DS_Store
