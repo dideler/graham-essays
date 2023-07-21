@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.SILENT: dependencies clean venv fetch merge epub words count mobi
+.SILENT: dependencies clean venv fetch merge epub word_count mobi
 
 all:  	clean venv fetch merge epub mobi pdf
 
@@ -12,7 +12,7 @@ merge:
 		@echo "🌪 Merging articles..."
 		pandoc essays/*.md -o graham.md -f markdown_strict
 
-count:
+word_count:
 		wc -w essays/* | sort -n
 
 venv:
