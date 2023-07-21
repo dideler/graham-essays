@@ -1,21 +1,30 @@
-name: Ubuntu
-
 on:
   push:
     branches: [main]
   pull_request:
-    branches: [main]
+    branches: '*'
 
 jobs:
-  build:
+  ubuntu:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Install dependencies
         run: make ubuntu_deps
+
+      - name: Build artifacts
+        run: make all
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: make macos_deps
 
       - name: Build artifacts
         run: make all
