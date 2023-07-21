@@ -16,8 +16,7 @@ jobs:
       - uses: actions/checkout@v2
 
       - name: Install dependencies
-        run: |
-          make dependencies
+        run: make macos_deps
 
       - name: Run
         run: make all

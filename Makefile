@@ -1,6 +1,6 @@
 SHELL := /bin/bash
 
-.SILENT: dependencies clean venv fetch markdown epub word_count mobi pdf
+.SILENT: macos_deps clean venv fetch markdown epub word_count mobi pdf
 
 all: clean venv fetch markdown epub mobi pdf
 
@@ -18,7 +18,7 @@ venv:
 		pip3 install --upgrade pip
 		pip3 install -r requirements.txt
 
-dependencies: # for MacOS
+macos_deps:
 		brew install python@3
 		brew install --build-from-source pandoc
 		brew install --cask calibre

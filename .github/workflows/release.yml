@@ -27,8 +27,7 @@ jobs:
             graham.pdf
 
       - name: Install dependencies
-        run: |
-          make dependencies
+        run: make macos_deps
 
       - name: Build artifacts
         run: make all
