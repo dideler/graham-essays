@@ -1,3 +1,4 @@
+import sys
 import csv
 import os.path
 import time
@@ -62,6 +63,7 @@ def clean_rss_link(link):
     return link[link.rfind("http") :]
 
 
+failed_fetches = []
 for entry in reversed(rss.entries):
     URL = clean_rss_link(entry["link"])
     TITLE = entry["title"]
@@ -108,6 +110,14 @@ for entry in reversed(rss.entries):
 
     except Exception as e:
         print(f"❌ {ART_NO:03} {entry['title']}, ({e})")
+        failed_fetches.append((ART_NO, entry["title"], entry["link"]))
 
     ART_NO += 1
     time.sleep(0.05)  # half sec/article is ~2min, be nice with servers!
+
+if failed_fetches:
+    print("Failed to fetch essays:", file=sys.stderr)
+    max_widths = [max(len(str(item[i])) for item in failed_fetches) for i in range(3)]
+    for no, title, link in failed_fetches:
+        print(f"{no:<{max_widths[0]}} {title:<{max_widths[1]}} {link:<{max_widths[2]}}")
+    sys.exit(1)
