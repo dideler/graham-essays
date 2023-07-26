@@ -58,10 +58,15 @@ def update_links_in_md(joined):
     return joined
 
 
-for entry in reversed(rss.entries):
-    URL = entry['link']
-    TITLE = entry['title']
+# The RSS feed from aaronsw.com gives incorrect links for articles not hosted on paulgraham.com
+# e.g.: "http://www.paulgraham.com/https://sep.turbifycdn.com/ty/cdn/paulgraham/acl2.txt?t=1689517705&amp;"
+def clean_rss_link(link):
+    return link[link.rfind("http") :]
 
+
+for entry in reversed(rss.entries):
+    URL = clean_rss_link(entry["link"])
+    TITLE = entry["title"]
 
     try:
         with urllib.request.urlopen(URL) as website:
