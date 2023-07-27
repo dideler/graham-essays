@@ -24,11 +24,6 @@ h.reference_links = True
 h.mark_code = True
 
 ART_NO = 1
-FILE = "./essays.csv"
-
-if ART_NO == 1:
-    if os.path.isfile(FILE):
-        os.remove(FILE)
 
 
 def update_links_in_md(joined):
@@ -63,11 +58,13 @@ def clean_rss_link(link):
     return link[link.rfind("http") :]
 
 
+csv_data = [["Article no.", "Title", "Date", "URL"]]
 failed_fetches = []
 
 for entry in reversed(rss.entries):
     URL = clean_rss_link(entry["link"])
     TITLE = entry["title"]
+    DATE = find_date(URL)
 
     try:
         with urllib.request.urlopen(URL) as website:
@@ -99,22 +96,8 @@ for entry in reversed(rss.entries):
                     content = content.encode()
 
                 file.write(content)
+                csv_data.append([ART_NO, TITLE, DATE, URL])
                 print(f"✅ {ART_NO:03} {TITLE}")
-
-                with open(FILE, "a+", newline="\n") as f:
-                    csvwriter = csv.writer(
-                        f, quoting=csv.QUOTE_MINIMAL, delimiter=",", quotechar='"'
-                    )
-
-                    if ART_NO == 1:
-                        header = ["Article no.", "Title", "Date", "URL"]
-                        csvwriter.writerow(header)
-
-                    DATE = find_date(entry["link"])
-
-                    line = [ART_NO, TITLE, DATE, URL]
-
-                    csvwriter.writerow(line)
 
     except Exception as e:
         print(f"❌ {ART_NO:03} {entry['title']}, ({e})")
@@ -122,6 +105,10 @@ for entry in reversed(rss.entries):
 
     ART_NO += 1
     time.sleep(0.05)  # half sec/article is ~2min, be nice with servers!
+
+with open("essays.csv", "w", newline="") as csv_file:
+    csvwriter = csv.writer(csv_file)
+    csvwriter.writerows(csv_data)
 
 if failed_fetches:
     print("Failed to fetch essays:", file=sys.stderr)
