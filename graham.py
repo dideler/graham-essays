@@ -64,33 +64,41 @@ def clean_rss_link(link):
 
 
 failed_fetches = []
+
 for entry in reversed(rss.entries):
     URL = clean_rss_link(entry["link"])
     TITLE = entry["title"]
 
     try:
         with urllib.request.urlopen(URL) as website:
+            content_type = website.headers["Content-Type"]
             content = website.read().decode("unicode_escape", "utf-8")
-            parsed = h.handle(content)
+
             title = "_".join(TITLE.split(" ")).lower()
             title = re.sub(r"[\W\s]+", "", title)
+
             with open(f"./essays/{ART_NO:03}_{title}.md", "wb+") as file:
                 file.write(f"# {ART_NO:03} {TITLE}\n\n".encode())
-                parsed = parsed.replace("[](index.html)  \n  \n", "")
 
-                parsed = [
-                    (
-                        p.replace("\n", " ")
-                        if re.match(r"^[\p{Z}\s]*(?:[^\p{Z}\s][\p{Z}\s]*){5,100}$", p)
-                        else "\n" + p + "\n"
-                    )
-                    for p in parsed.split("\n")
-                ]
+                if "text/html" in content_type:
+                    content = h.handle(content)
+                    content = content.replace("[](index.html)  \n  \n", "")
+                    content = [
+                        (
+                            p.replace("\n", " ")
+                            if re.match(
+                                r"^[\p{Z}\s]*(?:[^\p{Z}\s][\p{Z}\s]*){5,100}$", p
+                            )
+                            else "\n" + p + "\n"
+                        )
+                        for p in content.split("\n")
+                    ]
+                    content = " ".join(content).encode()
+                    content = update_links_in_md(content)
+                else:
+                    content = content.encode()
 
-                encoded = " ".join(parsed).encode()
-                update_with_links = update_links_in_md(encoded)
-                file.write(update_with_links)
-
+                file.write(content)
                 print(f"✅ {ART_NO:03} {TITLE}")
 
                 with open(FILE, "a+", newline="\n") as f:
