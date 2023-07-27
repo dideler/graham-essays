@@ -44,7 +44,7 @@ $(OUT_DIR)/%.pdf: $(OUT_DIR)/%.epub ## Creates a PDF book of the essays
 .PHONY: macos_deps
 macos_deps: ## Installs macOS dependencies
 	brew install python@3
-	brew install --build-from-source pandoc
+	brew install pandoc
 	brew install --cask calibre
 
 .PHONY: ubuntu_deps
