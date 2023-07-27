@@ -100,8 +100,8 @@ for entry in reversed(rss.entries):
                 print(f"✅ {ART_NO:03} {TITLE}")
 
     except Exception as e:
-        print(f"❌ {ART_NO:03} {entry['title']}, ({e})")
-        failed_fetches.append((ART_NO, entry["title"], entry["link"]))
+        print(f"❌ {ART_NO:03} {TITLE}, ({e})")
+        failed_fetches.append((ART_NO, TITLE, URL))
 
     ART_NO += 1
     time.sleep(0.05)  # half sec/article is ~2min, be nice with servers!
