@@ -106,7 +106,7 @@ for entry in reversed(rss.entries):
     ART_NO += 1
     time.sleep(0.05)  # half sec/article is ~2min, be nice with servers!
 
-with open("essays.csv", "w", newline="") as csv_file:
+with open("build/essays.csv", "w", newline="") as csv_file:
     csvwriter = csv.writer(csv_file)
     csvwriter.writerows(csv_data)
 
