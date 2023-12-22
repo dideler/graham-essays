@@ -8,7 +8,8 @@ __pycache__/
 
 # Distribution / packaging
 .Python
-build/
+build/*
+!build/.gitkeep
 develop-eggs/
 dist/
 downloads/
@@ -136,9 +137,6 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
-essays
-graham.md
-graham.epub
 Pipfile
 .vscode
 .DS_Store

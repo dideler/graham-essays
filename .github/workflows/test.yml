@@ -1,0 +1,38 @@
+name: Test
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: '*'
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install system dependencies
+        run: make ubuntu_deps
+
+      - name: Install Python dependencies
+        run: make .venv
+
+      - name: Build artifacts
+        run: make all
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install system dependencies
+        run: make macos_deps
+
+      - name: Install Python dependencies
+        run: make .venv
+
+      - name: Build artifacts
+        run: make all
